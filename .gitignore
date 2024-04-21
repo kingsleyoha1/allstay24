@@ -33,6 +33,6 @@ build/
 ### VS Code ###
 .vscode/
 
-mysql-data/
+/mysql-data/
 
-.DS_Store/
+**/.DS_Store
