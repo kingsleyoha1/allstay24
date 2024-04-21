@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    container_name: allstay24-bo-db
+    image: mysql
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: allstay24_bo_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3303:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - allstay24-net
+
+  allstay24-bo:
+    container_name: allstay24-backoffice
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8090:8080"        # Application port
+      - "5005:5005"        # JVM Debug port
+    volumes:
+        - ./src:/app/src
+    depends_on:
+      - mysqldb
+    environment:
+      SPRING_JPA_GENERATE_DDL: "true"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/allstay24_bo_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_PROPERTIES_JAVAX_PERSISTENCE_SCHEMA_GENERATION_SCRIPTS_ACTION: create
+      SPRING_JPA_PROPERTIES_JAVAX_PERSISTENCE_SCHEMA_GENERATION_SCRIPTS_CREATE_TARGET: ./mysql-data/schema.sql
+    networks:
+      - allstay24-net
+    restart: on-failure
+
+volumes:
+  mysql_data:
+
+networks:
+  allstay24-net:
+    driver: bridge
