@@ -38,6 +38,9 @@ services:
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_PROPERTIES_JAVAX_PERSISTENCE_SCHEMA_GENERATION_SCRIPTS_ACTION: create
       SPRING_JPA_PROPERTIES_JAVAX_PERSISTENCE_SCHEMA_GENERATION_SCRIPTS_CREATE_TARGET: ./mysql-data/schema.sql
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
     networks:
       - allstay24-net
     restart: on-failure
